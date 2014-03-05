@@ -1,3 +1,3 @@
-# RasPi Node.js Controller
+# RasPi Smart Home (etc...) Controller
 
-A node.js project to remotely control stuff such as music playing on Raspberry Pi.
+A project to remotely control stuff such as music playing on Raspberry Pi.
