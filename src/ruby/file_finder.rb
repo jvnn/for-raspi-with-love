@@ -1,5 +1,5 @@
 
-class FileLister
+class FileFinder
   def get_full_dirs(dir, root)
     new_dirs = dir.select do |x| File.directory?(File.join(root, x)) end
     new_dirs.reject! do |x| ['.', '..'].include?(x) end
@@ -32,5 +32,5 @@ class FileLister
   end
 end
 
-# lister = FileLister.new
-# puts lister.get_files(ARGV[0], '.mp3')
+# finder = FileFinder.new
+# puts finder.get_files(ARGV[0], '.mp3')

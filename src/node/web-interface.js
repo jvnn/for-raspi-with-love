@@ -3,8 +3,9 @@ var url = require('url');
 var fs = require('fs');
 var path = require('path');
 var util = require('util');
-var vol = require('./volume-control.js');
 var child = require('child_process');
+var vol = require('./volume-control.js');
+var ruby = require('./ruby-interface.js');
 
 if (process.argv.length != 3) {
 	console.log("Usage: node web-interface.js <web_root_dir>");
@@ -13,6 +14,8 @@ if (process.argv.length != 3) {
 }
 var WEB_ROOT = process.argv[2]
 var volume = new vol.VolumeControl();
+var ruby_bridge = new ruby.RubyBridge(8989);
+ruby_bridge.connect();
 
 http.createServer(function(req, res) {
 	pathname = url.parse(req.url).pathname;
@@ -66,7 +69,7 @@ http.createServer(function(req, res) {
 function doControl(cmd, params) {
 	switch(cmd) {
 	case 'music':
-		console.log("Add here: command to music player");
+		ruby_bridge.send_command(params);
 		break;
 	case 'volume':
 		switch(params) {
