@@ -26,5 +26,9 @@ class Player
     @player.get_by_name("file-source").set_property("location", song)
     @player.play
   end
+
+  def stop_playing()
+    @player.stop
+  end
 end
 

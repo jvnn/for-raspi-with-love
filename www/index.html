@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+<title>Music Controls</title>
+<link rel="stylesheet" type="text/css" href="style.css" />
+<script type="text/javascript" src="controls.js"></script>
+</head>
+<body>
+  <div class="control_button" onClick="controlPressed('stop')" >
+    <img src="img/stop.png" />
+  </div>
+
+  <div class="control_button" onClick="controlPressed('play')" >
+    <img src="img/play.png" />
+  </div>
+
+  <div class="control_button" onClick="controlPressed('next')" >
+    <img src="img/next.png" />
+  </div>
+
+  <div class="control_button new_row" onClick="controlPressed('minus')" >
+    <img src="img/minus.png" />
+  </div>
+
+  <div class="control_button" onClick="controlPressed('mute')" >
+    <img src="img/mute.png" />
+  </div>
+
+  <div class="control_button" onClick="controlPressed('plus')" >
+    <img src="img/plus.png" />
+  </div>
+
+  <div class="control_button" id="shutdown" onClick="controlPressed('shutdown')" >
+    SHUTDOWN
+  </div>
+</body>
+</html>

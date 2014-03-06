@@ -1,0 +1,33 @@
+body {
+    background:#000000;
+}
+
+.new_row {
+    clear:both;
+}
+
+.control_button {
+    float:left;
+    margin:6.6666666666%;
+    width:20%;
+    background:#00ffff;
+}
+
+.control_button:active {
+    background:#00b0b0;
+}
+
+.control_button img {
+    width:50%;
+    margin:25% 25%;
+}
+
+#shutdown {
+    clear:both;
+    margin:100px 6.6666666666%;
+    width:86.666666666%;
+    color:#505050;
+    text-align:center;
+    padding:6.6666666666% 0;
+    font-size:2em;
+}
