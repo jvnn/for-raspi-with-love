@@ -69,7 +69,7 @@ http.createServer(function(req, res) {
 function doControl(cmd, params) {
 	switch(cmd) {
 	case 'music':
-		ruby_bridge.send_command(params);
+		ruby_bridge.send_command("#{cmd} #{params}");
 		break;
 	case 'volume':
 		switch(params) {

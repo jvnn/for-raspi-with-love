@@ -42,16 +42,33 @@ class Controller
   end
 
   private
-  def handle_command(cmd)
-    case cmd
-    when "play"
-      @player.play_random()
-    when "stop"
-      @player.stop_playing()
-    when "next"
-      @player.next_song()
+  def handle_command(data)
+    category, cmd, param = data.split
+    case category
+      when "music"
+      case cmd
+      when "play"
+        @player.play_random
+      when "stop"
+        @player.stop_playing
+      when "next"
+        @player.next_song
+      else
+        puts "Ruby controller: invalid command for music category: " + cmd
+      end
+    when "timeout"
+      case cmd
+      when "music"
+        time_s = param.to_i
+        GLib::Timeout.add_seconds(time_s) do
+          @player.stop_playing
+          false
+        end
+      else
+        puts "Ruby controller: invalid command for timeout category: " + cmd
+      end
     else
-      puts "Invalid command to Ruby controller: " + cmd
+      puts "Ruby controller: invalid category: " + category
     end
   end
 end
