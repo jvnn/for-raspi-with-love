@@ -18,8 +18,8 @@ class Player
       case message.type
       when Gst::MessageType::EOS
         # next song
-        stop_playing()
-        play_random(false)
+        stop_playing(false)
+        play_random()
       end
       true
     end
