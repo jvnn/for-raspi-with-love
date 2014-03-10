@@ -1,3 +1,8 @@
+socket = io.connect();
+socket.on('song', function(data){
+	document.getElementById('current_song').innerHTML = data;
+});
+
 function makeAjaxCall(url, listener) {
     var req = new XMLHttpRequest();
     req.open('get', url);
@@ -12,26 +17,29 @@ function makeAjaxCall(url, listener) {
 function controlPressed(action) {
     switch(action) {
     case 'stop':
-	makeAjaxCall('control?cmd=music&params=stop');
-	break;
+		makeAjaxCall('control?cmd=music&params=stop');
+		break;
     case 'play':
-	makeAjaxCall('control?cmd=music&params=play');
-	break;
+		makeAjaxCall('control?cmd=music&params=play');
+		break;
     case 'next':
-	makeAjaxCall('control?cmd=music&params=next');
-	break;
+		makeAjaxCall('control?cmd=music&params=next');
+		break;
     case 'minus':
-	makeAjaxCall('control?cmd=volume&params=down');
-	break;
+		makeAjaxCall('control?cmd=volume&params=down');
+		break;
     case 'mute':
-	makeAjaxCall('control?cmd=volume&params=mute');
-	break;
+		makeAjaxCall('control?cmd=volume&params=mute');
+		break;
     case 'plus':
-	makeAjaxCall('control?cmd=volume&params=up');
-	break;
-    case 'shutdown':
-	makeAjaxCall('control?cmd=shutdown');
-	break;
+		makeAjaxCall('control?cmd=volume&params=up');
+		break;
+	default:
+		console.log('Invalid action for controlPressed: ' + action);
     }
+}
+
+function openDialog(action) {
+	alert(action);
 }
     

@@ -34,6 +34,11 @@ class Controller
           end
         end
       end
+      @player.set_interface do |data|
+        if not @client.closed?
+          @client.write(data)
+        end
+      end
       true
     end
     

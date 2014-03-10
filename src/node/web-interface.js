@@ -4,6 +4,7 @@ var fs = require('fs');
 var path = require('path');
 var util = require('util');
 var child = require('child_process');
+var io = require('socket.io');
 var vol = require('./volume-control.js');
 var ruby = require('./ruby-interface.js');
 
@@ -14,10 +15,9 @@ if (process.argv.length != 3) {
 }
 var WEB_ROOT = process.argv[2]
 var volume = new vol.VolumeControl();
-var ruby_bridge = new ruby.RubyBridge(8989);
-ruby_bridge.connect();
 
-http.createServer(function(req, res) {
+
+var server = http.createServer(function(req, res) {
 	pathname = url.parse(req.url).pathname;
 
 	console.log('Received request for: ' + pathname);
@@ -64,12 +64,15 @@ http.createServer(function(req, res) {
 		res.writeHead(404);
 		res.end();
 	}
-}).listen(8080);
+});
+
+server.listen(8080);
+
 
 function doControl(cmd, params) {
 	switch(cmd) {
 	case 'music':
-		ruby_bridge.send_command("#{cmd} #{params}");
+		ruby_bridge.send_command(util.format("%s %s", cmd, params));
 		break;
 	case 'volume':
 		switch(params) {
@@ -93,3 +96,21 @@ function doControl(cmd, params) {
 		console.log('Invalid command: ' + cmd);
 	}
 }
+
+var push_socket = io.listen(server);
+var out_socket = null;
+push_socket.on('connection', function(client) {
+	out_socket = client;
+});
+
+var ruby_bridge = new ruby.RubyBridge(8989);
+ruby_bridge.connect(function(data) {
+	if (out_socket != null) {
+		contents = data.toString().split(':', 2);
+		if (contents.length != 2) {
+			console.log('Invalid data from ruby bridge: ' + data);
+			return;
+		}
+		out_socket.emit(contents[0], contents[1]);
+	}
+});

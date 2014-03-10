@@ -4,6 +4,7 @@ require 'gst'
 class Player
   def initialize(songs)
     @songs = songs
+    @out_interface = nil
     Gst.init
     @player = Gst::Pipeline.new("pipeline")
     source = Gst::ElementFactory.make("filesrc", "file-source")
@@ -18,7 +19,7 @@ class Player
       when Gst::MessageType::EOS
         # next song
         stop_playing()
-        play_random()
+        play_random(false)
       end
       true
     end
@@ -35,18 +36,28 @@ class Player
 
   def next_song()
     if @player.get_state(1*Gst::SECOND)[1] == Gst::State::PLAYING
-      stop_playing()
+      stop_playing(false)
       play_random()
     end
   end
 
-  def stop_playing()
+  def stop_playing(report = true)
     @player.stop
+    if report and not @out_interface.nil?
+      @out_interface.call("song:...")
+    end
+  end
+
+  def set_interface(&data_interface)
+    @out_interface = data_interface
   end
 
   private
   def start_playing(song)
     @player.get_by_name("file-source").set_property("location", song)
+    if not @out_interface.nil?
+      @out_interface.call("song:#{song}")
+    end
     @player.play
   end
 end
