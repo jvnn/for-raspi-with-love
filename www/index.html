@@ -9,6 +9,28 @@
 <script type="text/javascript" src="controls.js"></script>
 </head>
 <body>
+
+  <div class="dialog" id="shutdown_dialog">
+	<div class="dialog_contents">
+	  <p class="dialog_title">Shutdown</p>
+	  <div class="dialog_main">Here will later be the shutdown timer controls...</div>
+	  <div class="dialog_button db_left">Cancel</div>
+	  <div class="dialog_button db_right">Shutdown</div>
+	</div>
+  </div>
+
+
+  <div class="button_row">
+	<div id="source_local_btn" class="control_button half active" onClick="changeSource('local')" >
+	  <img src="img/source_local.png" />
+	</div>
+	<div id="source_radio_btn" class="control_button half" onClick="changeSource('radio')" >
+	  <img src="img/source_radio.png" />
+	</div>
+  </div>
+
+  <div class="spacer"></div>
+
   <div class="changing_title" id="current_song">
 	...
   </div>
@@ -52,11 +74,11 @@
 	timers
   </div>
   <div class="button_row">
-	<div class="control_button half" onClick="openDialog('shutdown')" >
+	<div class="control_button half" onClick="openDialog('shutdown_dialog')" >
       <img src="img/shutdown.png" />
 	</div>
 
-	<div class="control_button half" onClick="openDialog('alarm')" >
+	<div class="control_button half" onClick="openDialog('alarm_dialog')" >
       <img src="img/alarm.png" />
 	</div>
   </div>

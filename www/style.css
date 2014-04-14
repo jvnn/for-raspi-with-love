@@ -32,6 +32,7 @@ body {
 .control_button {
     float:left;
     background:#4d4d4d;
+	border-bottom: 3px solid #4d4d4d;
 }
 
 .third {
@@ -46,9 +47,60 @@ body {
     background:#808080;
 }
 
+.control_button.active {
+	border-bottom: 3px solid #ff7f2a;
+}
+
 .control_button img {
 	width:32px;
     margin:20px auto;
 	display:block;
 }
 
+.dialog {
+	position:absolute;
+	width:100%;
+	height:100%;
+	background-image:url('img/white_fade.png');
+	background-repeat:repeat;
+	display:none;
+}
+
+.dialog_contents {
+	position:fixed;
+	background:#ffffff;
+	top:80px;
+	right:20px;
+	left:20px;
+	height:300px;
+	border:1px solid #4d4d4d;
+}
+
+.dialog_title {
+	text-align:right;
+	margin:10px 10px;
+	font-style:italic;
+	font-family:sans;
+}
+
+.dialog_main {
+	margin: 80px 20px;
+}
+
+.dialog_button {
+	position:absolute;
+	bottom:0px;
+	width:50%;
+	height:40px;
+	background:#4d4d4d;
+	color:#ff7f2a;
+	text-align:center;
+}
+
+.db_left {
+	left:0;
+}
+
+.db_right {
+	right:0;
+}

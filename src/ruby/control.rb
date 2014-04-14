@@ -3,6 +3,9 @@ require 'socket'
 require './music_player'
 require './file_finder'
 
+# change this to something less hard-coded later...
+RADIO_URI = 'http://liferadio.liwest.at:8000/liferadio2'
+
 class Controller
   def initialize()
     @server = TCPServer.new(8989)
@@ -50,7 +53,7 @@ class Controller
   def handle_command(data)
     category, cmd, param = data.split
     case category
-      when "music"
+    when "music"
       case cmd
       when "play"
         @player.play_random
@@ -58,6 +61,8 @@ class Controller
         @player.stop_playing
       when "next"
         @player.next_song
+      when "radio"
+        @player.start_radio RADIO_URI
       else
         puts "Ruby controller: invalid command for music category: " + cmd
       end
