@@ -1,0 +1,11 @@
+{
+"radio_uris":
+	[{"name":"LifeRadio",
+	  "uri":"http://liferadio.liwest.at:8000/liferadio2"},
+	 {"name":"DI Lounge",
+	  "uri":"http://pub3.di.fm:80/di_lounge"},
+	 {"name":"DI ChillOut",
+	  "uri":"http://pub3.di.fm:80/di_chillout"},
+	 {"name":"DI Space Dreams",
+	  "uri":"http://pub3.di.fm:80/di_spacemusic"}]
+}
