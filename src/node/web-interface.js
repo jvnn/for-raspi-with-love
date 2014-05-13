@@ -6,7 +6,7 @@ var util = require('util');
 var child = require('child_process');
 var io = require('socket.io');
 var vol = require('./volume-control.js');
-var ruby = require('./ruby-interface.js');
+var python = require('./python-interface.js');
 
 if (process.argv.length != 3) {
 	console.log("Usage: node web-interface.js <web_root_dir>");
@@ -72,7 +72,7 @@ server.listen(8080);
 function doControl(cmd, params) {
 	switch(cmd) {
 	case 'music':
-		ruby_bridge.send_command(util.format("%s %s", cmd, params));
+		python_bridge.send_command(util.format("%s %s", cmd, params));
 		break;
 	case 'volume':
 		switch(params) {
@@ -103,12 +103,12 @@ push_socket.on('connection', function(client) {
 	out_socket = client;
 });
 
-var ruby_bridge = new ruby.RubyBridge(8989);
-ruby_bridge.connect(function(data) {
+var python_bridge = new python.PythonBridge(8989);
+python_bridge.connect(function(data) {
 	if (out_socket != null) {
 		contents = data.toString().split(':', 2);
 		if (contents.length != 2) {
-			console.log('Invalid data from ruby bridge: ' + data);
+			console.log('Invalid data from python bridge: ' + data);
 			return;
 		}
 		out_socket.emit(contents[0], contents[1]);

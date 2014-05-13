@@ -20,7 +20,7 @@ DIR="$( cd -P "$( dirname "$SOURCE" )" && pwd )"
 # End of StackOverflow magic...
 
 
-RUBY_DIR="$DIR/src/ruby"
+PYTHON_DIR="$DIR/src/python"
 NODE_DIR="$DIR/src/node"
 WWW_DIR="$DIR/www"
 
@@ -33,20 +33,27 @@ fi
 
 if [ $1 = "--kill" ]
 then
-	RUBY_PID=`cat /tmp/pi-framework-ruby-pid`
+	PYTHON_PID=`cat /tmp/pi-framework-python-pid`
 	NODE_PID=`cat /tmp/pi-framework-node-pid`
-	if [ -n $RUBY_PID ] && [ -n $NODE_PID ]
+	if [ -n $PYTHON_PID ] && [ -n $NODE_PID ]
 	then
-		kill $RUBY_PID
+		kill $PYTHON_PID
 		kill $NODE_PID
-		rm /tmp/pi-framework-ruby-pid
+		rm /tmp/pi-framework-python-pid
 		rm /tmp/pi-framework-node-pid
 	fi
 	exit 0
 fi
 
-ruby -C $RUBY_DIR $RUBY_DIR/control.rb $1 &
-echo "$!" > /tmp/pi-framework-ruby-pid
+cd $PYTHON_DIR
+if command -v python2 > /dev/null; then
+	PYTHON_CMD=python2
+else
+	PYTHON_CMD=python
+fi
+$PYTHON_CMD control.py $1 &
+cd -
+echo "$!" > /tmp/pi-framework-python-pid
 sleep 2
 node $NODE_DIR/web-interface.js $WWW_DIR &
 echo "$!" > /tmp/pi-framework-node-pid
