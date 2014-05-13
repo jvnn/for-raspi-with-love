@@ -12,6 +12,7 @@ class Player:
         self.songs = songs
         self.player = gst.Pipeline("player")
         self.radio = None
+        self.current_song = None
         source = gst.element_factory_make("filesrc", "file-source")
         decoder = gst.element_factory_make("mad", "mp3-decoder")
         conv = gst.element_factory_make("audioconvert", "converter")
@@ -45,6 +46,7 @@ class Player:
         self.play_random()
 
     def start_radio(self, uri, name):
+        self.current_song = name
         self.stop_playing(False)
         self.__stop_radio()
         self.radio = gst.Pipeline("radio")
@@ -55,7 +57,12 @@ class Player:
         if self.comm_interface:
             self.comm_interface("song:{}".format(name))
 
+    def report_current_song(self):
+        if self.current_song and self.comm_interface:
+            self.comm_interface("song:{}".format(self.current_song))
+
     def __start_playing(self, song):
+        self.current_song = song
         self.player.get_by_name("file-source").set_property("location", song)
         self.player.set_state(gst.STATE_PLAYING)
         if self.comm_interface:

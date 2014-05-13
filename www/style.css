@@ -29,10 +29,31 @@ body {
 	clear:both;
 }
 
+#radio_selection {
+	margin: 20px;
+}
+
+.radio_station {
+	width: 80%;
+	margin: 1px auto;
+	background: #4d4d4d;
+	cursor: pointer;
+	padding: 5px;
+	text-align: center;
+	color: #ff7f2a;
+}
+
 .control_button {
     float:left;
     background:#4d4d4d;
 	border-bottom: 3px solid #4d4d4d;
+	cursor: pointer;
+}
+
+.control_button.disabled {
+	background: #808080;
+	border-bottom: 3px solid #808080;
+	cursor: initial;
 }
 
 .third {
@@ -95,6 +116,11 @@ body {
 	background:#4d4d4d;
 	color:#ff7f2a;
 	text-align:center;
+	padding: 10px;
+	cursor: pointer;
+	-webkit-box-sizing: border-box;
+	   -moz-box-sizing: border-box;
+	        box-sizing: border-box;
 }
 
 .db_left {

@@ -14,8 +14,8 @@
 	<div class="dialog_contents">
 	  <p class="dialog_title">Shutdown</p>
 	  <div class="dialog_main">Here will later be the shutdown timer controls...</div>
-	  <div class="dialog_button db_left">Cancel</div>
-	  <div class="dialog_button db_right">Shutdown</div>
+	  <div class="dialog_button db_left" onClick="closeDialog('shutdown_dialog')">Cancel</div>
+	  <div class="dialog_button db_right" onClick="initiateShutdown()">Shutdown</div>
 	</div>
   </div>
 
@@ -31,6 +31,11 @@
 
   <div class="spacer"></div>
 
+  <div id="radio_selection">
+	<div id="radio_stations"></div>	
+	<div class="spacer"></div>
+  </div>
+
   <div class="changing_title" id="current_song">
 	...
   </div>
@@ -40,11 +45,11 @@
       <img src="img/stop.png" />
 	</div>
 
-	<div class="control_button third" onClick="controlPressed('play')" >
+	<div id="play_button" class="control_button third" onClick="controlPressed('play')" >
       <img src="img/play.png" />
 	</div>
 
-	<div class="control_button third" onClick="controlPressed('next')" >
+	<div id="next_button" class="control_button third" onClick="controlPressed('next')" >
       <img src="img/next.png" />
 	</div>
   </div>

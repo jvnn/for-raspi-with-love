@@ -28,6 +28,12 @@ var server = http.createServer(function(req, res) {
 		res.writeHead(200, {'Content-Type': 'text/plain'});
 		res.end('OK');
 		return;
+	} else if (pathname == '/query') {
+		query = url.parse(req.url, true).query;
+		doQuery(query['req']);
+		res.writeHead(200, {'Content-Type': 'text/plain'});
+		res.end('OK');
+		return;
 	}
 
 	full_path = WEB_ROOT + pathname;
@@ -96,6 +102,13 @@ function doControl(cmd, params) {
 		console.log('Invalid command: ' + cmd);
 	}
 }
+
+
+function doQuery(request) {
+	python_bridge.send_command(util.format("query %s", request));
+}
+
+
 
 var push_socket = io.listen(server);
 var out_socket = null;

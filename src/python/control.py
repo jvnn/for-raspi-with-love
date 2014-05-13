@@ -1,4 +1,5 @@
 import sys
+import atexit
 import glib, gobject
 import socket
 import json
@@ -11,6 +12,7 @@ class Controller:
 
     def __init__(self):
         self.client = None
+        self.server_sock = None
 
         with open(MUSIC_CONFIG_FILE, 'r') as f:
             conf = json.load(f)
@@ -26,13 +28,19 @@ class Controller:
 
     def run(self):
         # set up the control socket
-        sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        sock.bind(('', 8989))
-        sock.listen(1)
-        glib.io_add_watch(sock, glib.IO_IN, self.__accept_listener)
+        self.server_sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        self.server_sock.bind(('', 8989))
+        self.server_sock.listen(1)
+        glib.io_add_watch(self.server_sock, glib.IO_IN, self.__accept_listener)
         gobject.threads_init()
         loop = glib.MainLoop()
         loop.run()
+
+    def cleanup(self):
+        if self.server_sock:
+            self.server_sock.close()
+        if self.client:
+            self.client.close()
 
     def __accept_listener(self, sock, *args):
         self.client, addr = sock.accept()
@@ -70,6 +78,7 @@ class Controller:
             else:
                 print("Python controller: invalid command for music category: {}".
                       format(cmd))
+
         elif category == "timeout":
             if cmd == "music":
                 time_s = int(param)
@@ -77,6 +86,16 @@ class Controller:
             else:
                 print("Python controller: invalid command for timeout category: {}".
                       format(cmd))
+        
+        elif category == "query":
+            if cmd == "song":
+                self.player.report_current_song()
+            elif cmd == "stations":
+                if self.client:
+                    self.client.send('stations:' + '\n'.join(self.radio_uris.keys()))
+            else:
+                print("Python controller: invalid query: {}".format(cmd))
+
         else:
             print("Python controller: invalid category: {}".format(category))
 
@@ -91,5 +110,6 @@ class Controller:
 
 if __name__ == "__main__":
     ctrl = Controller()
+    atexit.register(ctrl.cleanup)
     ctrl.run()
-        
+

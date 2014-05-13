@@ -1,7 +1,18 @@
 socket = io.connect();
+
 socket.on('song', function(data){
 	document.getElementById('current_song').innerHTML = data;
 });
+
+socket.on('stations', function(data){
+	showRadioStations(data.split('\n'));
+});
+
+
+window.onload = function() {
+	makeAjaxCall('query?req=song');
+}
+
 
 var source = 'local';	
 
@@ -9,7 +20,7 @@ function makeAjaxCall(url, listener) {
     var req = new XMLHttpRequest();
     req.open('get', url);
     req.onreadystatechange = function() {
-		if (req.readyState == 4) {
+		if (req.readyState == 4 && listener != null) {
 			listener(req.responseText);
 		}
     };
@@ -20,6 +31,11 @@ function changeSource(src) {
 	source = src;
 	document.getElementById('source_local_btn').classList.toggle('active');
 	document.getElementById('source_radio_btn').classList.toggle('active');
+	if (source == 'radio') {
+		makeAjaxCall('query?req=stations');
+	} else {
+		clearRadioStations();
+	}
 }
 
 function controlPressed(action) {
@@ -30,8 +46,6 @@ function controlPressed(action) {
     case 'play':
 		if (source == 'local') {
 			makeAjaxCall('control?cmd=music&params=play');
-		} else if (source == 'radio') {
-			makeAjaxCall('control?cmd=music&params=radio');
 		} else {
 			console.log('Cannot start playing, invalid source: ' + source);
 		}
@@ -65,4 +79,39 @@ function closeDialog(dialog_id) {
 	if (dialog != null) {
 		dialog.style.display = 'none';
 	}
+}
+
+function showRadioStations(stations) {
+	slot = document.getElementById('radio_stations');
+	markup = '';
+	for (i = 0; i < stations.length; i++) {
+		markup += '<div class="radio_station" onclick="tuneToStation(\'' +
+			stations[i] + '\')">' + stations[i] + '</div>';
+	}
+	slot.innerHTML = markup;
+
+	play_btn = document.getElementById('play_button');
+	next_btn = document.getElementById('next_button');
+	play_btn.classList.add('disabled');
+	next_btn.classList.add('disabled');
+	play_btn.onclick = null;
+	next_btn.onclick = null;
+}
+
+function clearRadioStations() {
+	document.getElementById('radio_stations').innerHTML = '';
+	play_btn = document.getElementById('play_button');
+	next_btn = document.getElementById('next_button');
+	play_btn.classList.remove('disabled');
+	next_btn.classList.remove('disabled');
+	play_btn.onclick = function() {controlPressed('play');};
+	next_btn.onclick = function() {controlPressed('next');};
+}
+
+function tuneToStation(station) {
+	makeAjaxCall('control?cmd=music&params=radio%20' + station);
+}
+
+function initiateShutdown() {
+	makeAjaxCall('control?cmd=shutdown');
 }
